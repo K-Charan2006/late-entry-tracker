@@ -35,7 +35,7 @@ export const getSheetsInfo = async () => {
     });
     return {
         title: response.data.properties?.title,
-        sheets: response.data.sheets?.map(s => s.properties?.title)
+        sheets: response.data.sheets?.map((s: any) => s.properties?.title)
     };
 };
 
@@ -46,7 +46,7 @@ export const getStudentsFromSheet = async () => {
             range: "Students!A2:E",
         });
         const rows = response.data.values || [];
-        return rows.map((row) => ({
+        return rows.map((row: any[]) => ({
             hallticket_id: row[0],
             name: row[1],
             branch: row[2],
@@ -66,7 +66,7 @@ export const getLogsFromSheet = async () => {
             range: "LateLogs!A2:F",
         });
         const rows = response.data.values || [];
-        return rows.map((row) => ({
+        return rows.map((row: any[]) => ({
             id: parseInt(row[0], 10),
             hallticket_id: row[1],
             reason: row[2],
@@ -88,8 +88,8 @@ export const getUsersFromSheet = async () => {
         });
         const rows = response.data.values || [];
         return rows
-            .filter(row => row.length >= 2)
-            .map((row) => ({
+            .filter((row: any[]) => row.length >= 2)
+            .map((row: any[]) => ({
                 username: row[0],
                 password: row[1],
                 role: row[2] || 'TEACHER',

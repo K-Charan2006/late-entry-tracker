@@ -21,7 +21,7 @@ router.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const users = await sheetsService.getUsersFromSheet();
 
-    const user = users.find(u =>
+    const user = users.find((u: any) =>
         u.username?.toString().trim() === username?.toString().trim() &&
         u.password?.toString().trim() === password?.toString().trim()
     );
@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
 router.get("/students/:id", async (req, res) => {
     const branchAccess = req.query.branch_access as string;
     const students = await sheetsService.getStudentsFromSheet();
-    const student = students.find(s => s.hallticket_id === req.params.id);
+    const student = students.find((s: any) => s.hallticket_id === req.params.id);
 
     if (student) {
         if (branchAccess && branchAccess !== "ALL" && student.branch !== branchAccess) {
@@ -56,7 +56,7 @@ router.post("/late-logs", async (req, res) => {
     const { hallticket_id, reason, date, branch_access } = req.body;
     try {
         const students = await sheetsService.getStudentsFromSheet();
-        const student = students.find(s => s.hallticket_id === hallticket_id);
+        const student = students.find((s: any) => s.hallticket_id === hallticket_id);
 
         if (!student) return res.status(404).json({ error: "Student not found" });
         if (branch_access && branch_access !== "ALL" && student.branch !== branch_access) {
@@ -88,8 +88,8 @@ router.get("/analytics", async (req, res) => {
         const logs = await sheetsService.getLogsFromSheet();
         const students = await sheetsService.getStudentsFromSheet();
 
-        const enrichedLogs = logs.map(log => {
-            const student = students.find(s => s.hallticket_id === log.hallticket_id);
+        const enrichedLogs = logs.map((log: any) => {
+            const student = students.find((s: any) => s.hallticket_id === log.hallticket_id);
             return {
                 ...log,
                 name: student?.name || log.name,
@@ -97,7 +97,7 @@ router.get("/analytics", async (req, res) => {
                 section: student?.section,
                 year: student?.year
             };
-        }).filter(log => {
+        }).filter((log: any) => {
             if (!branchAccess || branchAccess === "ALL") return true;
             return log.branch === branchAccess;
         });

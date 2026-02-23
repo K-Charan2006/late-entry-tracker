@@ -35,3 +35,22 @@ To use this application, you need to set up a Google Cloud Service Account and c
 1.  Your Spreadsheet ID is the long string in the browser URL:
     `https://docs.google.com/spreadsheets/d/[THIS_IS_THE_ID]/edit`
 2.  Add this ID to your `.env` file as `GOOGLE_SHEET_ID`.
+
+### Step 7: Spreadsheet Structure
+Your Google Sheet **must** have these 3 tabs (sheets) with the exact headers in the first row. Tab names are case-sensitive.
+
+#### 1. `Students` Tab
+| A: hallticket_id | B: name | C: branch | D: section | E: year |
+| :--- | :--- | :--- | :--- | :--- |
+| 21A91A0501 | John Doe | CSE | A | 3 |
+
+#### 2. `LateLogs` Tab
+| A: id | B: hallticket_id | C: reason | D: timestamp | E: date | F: name |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *(Auto-filled)* | *(Auto-filled)* | *(Auto-filled)* | *(Auto-filled)* | *(Auto-filled)* | *(Auto-filled)* |
+
+#### 3. `User` Tab
+| A: username | B: password | C: role | D: branch_access |
+| :--- | :--- | :--- | :--- |
+| admin | admin123 | HOD | ALL |
+| teacher1 | pass123 | TEACHER | CSE |

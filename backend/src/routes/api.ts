@@ -1,9 +1,9 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import * as sheetsService from "../services/googleSheets.js";
 
 const router = Router();
 
-router.get("/test-sheets", async (req, res) => {
+router.get("/test-sheets", async (req: Request, res: Response) => {
     try {
         const info = await sheetsService.getSheetsInfo();
         res.json({ success: true, ...info });
@@ -17,7 +17,7 @@ router.get("/test-sheets", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const users = await sheetsService.getUsersFromSheet();
 
@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.get("/students/:id", async (req, res) => {
+router.get("/students/:id", async (req: Request, res: Response) => {
     const branchAccess = req.query.branch_access as string;
     const students = await sheetsService.getStudentsFromSheet();
     const student = students.find((s: any) => s.hallticket_id === req.params.id);
@@ -52,7 +52,7 @@ router.get("/students/:id", async (req, res) => {
     }
 });
 
-router.post("/late-logs", async (req, res) => {
+router.post("/late-logs", async (req: Request, res: Response) => {
     const { hallticket_id, reason, date, branch_access } = req.body;
     try {
         const students = await sheetsService.getStudentsFromSheet();
@@ -82,7 +82,7 @@ router.post("/late-logs", async (req, res) => {
     }
 });
 
-router.get("/analytics", async (req, res) => {
+router.get("/analytics", async (req: Request, res: Response) => {
     const branchAccess = req.query.branch_access as string;
     try {
         const logs = await sheetsService.getLogsFromSheet();
@@ -108,7 +108,7 @@ router.get("/analytics", async (req, res) => {
     }
 });
 
-router.post("/students/import", async (req, res) => {
+router.post("/students/import", async (req: Request, res: Response) => {
     const students = req.body;
     try {
         await sheetsService.updateStudentsBatch(students);

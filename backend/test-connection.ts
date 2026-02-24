@@ -9,7 +9,7 @@ dotenv.config();
 async function test() {
     console.log("--- Google Sheets Connection Diagnostic ---");
     console.log("Current Directory:", process.cwd());
-    console.log("SPREADSHEET_ID:", process.env.GOOGLE_SHEET_ID || "Using Hardcoded Default: 1Kh8OdebG9CmnYLuFLD2hHP6aBHf8yVARugRVVlJ6a6U");
+    console.log("SPREADSHEET_ID:", process.env.GOOGLE_SHEET_ID || "MISSING");
 
     try {
         console.log("\nAttempting to fetch spreadsheet info...");
@@ -27,9 +27,9 @@ async function test() {
         if (error.message.includes("404")) {
             console.log("\nCAUSE: Spreadsheet NOT FOUND. Your GOOGLE_SHEET_ID is likely incorrect.");
         } else if (error.message.includes("403")) {
-            console.log("\nCAUSE: PERMISSION DENIED. You must share your sheet with the client_email in credentials.json.");
-        } else if (error.message.includes("ENOENT")) {
-            console.log("\nCAUSE: credentials.json NOT FOUND in the backend folder.");
+            console.log("\nCAUSE: PERMISSION DENIED. Share your sheet with the service account client_email in GOOGLE_SERVICE_ACCOUNT_JSON.");
+        } else if (error.message.includes("GOOGLE_SERVICE_ACCOUNT_JSON")) {
+            console.log("\nCAUSE: Missing/invalid GOOGLE_SERVICE_ACCOUNT_JSON in environment variables.");
         }
     }
 }

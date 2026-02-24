@@ -14,6 +14,7 @@ import { Layout } from './components/Layout';
 import { LookupTab } from './components/LookupTab';
 import { AnalyticsTab } from './components/AnalyticsTab';
 import { ImportTab } from './components/ImportTab';
+import { CoverScreen } from './components/CoverScreen';
 
 const TABS = [
   { id: 'lookup', label: 'Lookup & Log', icon: Search, roles: ['HOD', 'TEACHER'] },
@@ -22,6 +23,7 @@ const TABS = [
 ];
 
 export default function App() {
+  const [showCover, setShowCover] = useState(true);
   const [user, setUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('user');
     return saved ? JSON.parse(saved) : null;
@@ -123,6 +125,10 @@ export default function App() {
       setLoading(false);
     }
   };
+
+  if (showCover) {
+    return <CoverScreen onDone={() => setShowCover(false)} />;
+  }
 
   if (!user) {
     return (

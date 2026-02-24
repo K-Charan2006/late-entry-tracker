@@ -22,7 +22,7 @@ To use this application, you need to set up a Google Cloud Service Account and c
 2.  Go to the **Keys** tab.
 3.  Click **ADD KEY > Create new key**.
 4.  Select **JSON** and click **Create**.
-5.  **Rename** the downloaded file to `credentials.json` and move it into the `backend/` folder of your project.
+5.  Keep this file secure; you will use its content in your `.env` as `GOOGLE_SERVICE_ACCOUNT_JSON`.
 
 ### Step 5: Share your Google Sheet
 1.  Open the service account you just created.
@@ -35,6 +35,7 @@ To use this application, you need to set up a Google Cloud Service Account and c
 1.  Your Spreadsheet ID is the long string in the browser URL:
     `https://docs.google.com/spreadsheets/d/[THIS_IS_THE_ID]/edit`
 2.  Add this ID to your `.env` file as `GOOGLE_SHEET_ID`.
+3.  Add the full JSON key content as `GOOGLE_SERVICE_ACCOUNT_JSON` in `.env`.
 
 ### Step 7: Spreadsheet Structure
 Your Google Sheet **must** have these 3 tabs (sheets) with the exact headers in the first row. Tab names are case-sensitive.

@@ -21,9 +21,9 @@ export const Layout: React.FC<LayoutProps> = ({
     tabs
 }) => {
     return (
-        <div className="min-h-screen flex flex-col bg-slate-50">
+        <div className="app-surface min-h-screen flex flex-col">
             {/* Header */}
-            <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+            <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="bg-slate-900 p-2 rounded-lg">
                         <Clock className="text-white w-6 h-6" />
@@ -65,12 +65,12 @@ export const Layout: React.FC<LayoutProps> = ({
                 </div>
             </header>
 
-            <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
+            <main className="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full">
                 {children}
             </main>
 
             {/* Mobile Navigation */}
-            <nav className="md:hidden bg-white border-t border-slate-200 px-6 py-3 flex items-center justify-around sticky bottom-0 z-10 shadow-lg">
+            <nav className="md:hidden bg-white/90 backdrop-blur-md border-t border-slate-200 px-6 py-3 flex items-center justify-around sticky bottom-0 z-10 shadow-lg">
                 {tabs.filter(t => t.roles.includes(user?.role || '')).map(tab => (
                     <button
                         key={tab.id}

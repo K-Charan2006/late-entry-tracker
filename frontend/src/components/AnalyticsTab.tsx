@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
+import { Search, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
     BarChart,
@@ -13,8 +13,10 @@ import {
     Pie,
     Cell
 } from 'recharts';
-import { format, parseISO } from 'date-fns';
+import { format, isValid, parseISO } from 'date-fns';
 import { LateLog, User } from '../types';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const COLORS = ['#0f172a', '#334155', '#475569', '#64748b', '#94a3b8'];
 
@@ -28,8 +30,16 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
         year: 'ALL',
         branch: 'ALL',
         section: 'ALL',
-        rollNo: ''
+        rollNo: '',
+        fromDate: '',
+        toDate: ''
     });
+
+    const getLogDate = (log: LateLog) => {
+        if (log.date) return log.date;
+        const parsedTimestamp = parseISO(log.timestamp);
+        return isValid(parsedTimestamp) ? format(parsedTimestamp, 'yyyy-MM-dd') : '';
+    };
 
     const filteredLogs = logs.filter(log => {
         const matchYear = filters.year === 'ALL' || log.year?.toString() === filters.year;
@@ -38,7 +48,12 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
         const matchRoll = !filters.rollNo ||
             log.hallticket_id.toLowerCase().includes(filters.rollNo.toLowerCase()) ||
             log.name?.toLowerCase().includes(filters.rollNo.toLowerCase());
-        return matchYear && matchBranch && matchSection && matchRoll;
+
+        const logDate = getLogDate(log);
+        const matchFromDate = !filters.fromDate || (logDate && logDate >= filters.fromDate);
+        const matchToDate = !filters.toDate || (logDate && logDate <= filters.toDate);
+
+        return matchYear && matchBranch && matchSection && matchRoll && matchFromDate && matchToDate;
     });
 
     const branchData = filteredLogs.reduce((acc: any[], log) => {
@@ -61,10 +76,70 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
         l.hallticket_id.toLowerCase() === filters.rollNo.toLowerCase()
     ) : [];
 
+    const downloadPdf = () => {
+        const doc = new jsPDF();
+        const reportDate = format(new Date(), 'yyyy-MM-dd HH:mm');
+        const todayKey = format(new Date(), 'yyyy-MM-dd');
+        const uniqueStudents = new Set(filteredLogs.map(l => l.hallticket_id)).size;
+        const entriesToday = filteredLogs.filter(l => getLogDate(l) === todayKey).length;
+
+        doc.setFontSize(16);
+        doc.text('Late Tracker Analytics Report', 14, 16);
+        doc.setFontSize(10);
+        doc.text(`Generated: ${reportDate}`, 14, 23);
+        doc.text(`Total Filtered Entries: ${filteredLogs.length}`, 14, 29);
+        doc.text(`Entries Today: ${entriesToday}`, 14, 35);
+        doc.text(`Unique Students: ${uniqueStudents}`, 14, 41);
+
+        const filterText = [
+            `Year: ${filters.year}`,
+            `Branch: ${filters.branch}`,
+            `Section: ${filters.section}`,
+            `Search: ${filters.rollNo || 'N/A'}`,
+            `From: ${filters.fromDate || 'N/A'}`,
+            `To: ${filters.toDate || 'N/A'}`
+        ].join(' | ');
+        doc.text(`Filters: ${filterText}`, 14, 47, { maxWidth: 180 });
+
+        autoTable(doc, {
+            startY: 54,
+            head: [['Hallticket ID', 'Name', 'Branch', 'Section', 'Year', 'Reason', 'Date/Time']],
+            body: filteredLogs.slice(0, 500).map(log => {
+                const parsed = parseISO(log.timestamp);
+                const dateTime = isValid(parsed) ? format(parsed, 'yyyy-MM-dd HH:mm') : (log.timestamp || '');
+                return [
+                    log.hallticket_id || '',
+                    log.name || '',
+                    log.branch || '',
+                    log.section || '',
+                    log.year?.toString() || '',
+                    log.reason || '',
+                    dateTime
+                ];
+            }),
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [15, 23, 42] },
+            theme: 'striped'
+        });
+
+        doc.save(`analytics-report-${format(new Date(), 'yyyyMMdd-HHmm')}.pdf`);
+    };
+
     return (
         <div className="space-y-8">
             {/* Advanced Filters */}
-            <div className="glass-card p-6 bg-white border border-slate-100 rounded-3xl shadow-sm grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="glass-card p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                    <h3 className="text-lg font-bold text-slate-800">Analytics Filters</h3>
+                    <button
+                        onClick={downloadPdf}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition-colors"
+                    >
+                        <Download className="w-4 h-4" />
+                        Download PDF
+                    </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
                 <div>
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Year</label>
                     <select
@@ -118,6 +193,26 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                             className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all text-sm"
                         />
                     </div>
+                </div>
+                <div>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">From Date</label>
+                    <input
+                        type="date"
+                        value={filters.fromDate}
+                        onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
+                        className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all text-sm"
+                    />
+                </div>
+                <div>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">To Date</label>
+                    <input
+                        type="date"
+                        value={filters.toDate}
+                        min={filters.fromDate || undefined}
+                        onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
+                        className="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all text-sm"
+                    />
+                </div>
                 </div>
             </div>
 

@@ -1,33 +1,64 @@
 import { google } from "googleapis";
 import path from "path";
 import fs from "fs";
+import dotenv from "dotenv";
+
+const envPaths = [
+    path.resolve(process.cwd(), ".env"),
+    path.resolve(process.cwd(), "..", ".env"),
+];
+
+for (const envPath of envPaths) {
+    if (fs.existsSync(envPath)) {
+        dotenv.config({ path: envPath });
+    }
+}
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;
-
 if (!SPREADSHEET_ID) {
-    console.error("CRITICAL: GOOGLE_SHEET_ID is not defined in environment variables!");
+    throw new Error("CRITICAL: GOOGLE_SHEET_ID is required.");
 }
 
-let auth;
-if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-    const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-    auth = new google.auth.GoogleAuth({
-        credentials,
-        scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-    });
-} else {
-    // Try to find credentials.json in root or backend folder
-    const rootPath = path.join(process.cwd(), "credentials.json");
-    const backendPath = path.join(process.cwd(), "backend", "credentials.json");
-    const credPath = fs.existsSync(rootPath) ? rootPath : backendPath;
-
-    auth = new google.auth.GoogleAuth({
-        keyFile: credPath,
-        scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-    });
+const SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+if (!SERVICE_ACCOUNT_JSON) {
+    throw new Error("CRITICAL: GOOGLE_SERVICE_ACCOUNT_JSON is required. credentials.json fallback is disabled.");
 }
+
+let credentials;
+try {
+    credentials = JSON.parse(SERVICE_ACCOUNT_JSON);
+} catch {
+    throw new Error("CRITICAL: GOOGLE_SERVICE_ACCOUNT_JSON is not valid JSON.");
+}
+
+const auth = new google.auth.GoogleAuth({
+    credentials,
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+});
 
 const sheets = google.sheets({ version: "v4", auth });
+let sheetTitleMap: Map<string, string> | null = null;
+
+const normalizeKey = (value: string) => value.trim().toLowerCase();
+
+const getSheetTitle = async (expectedName: string) => {
+    if (!sheetTitleMap) {
+        const metadata = await sheets.spreadsheets.get({
+            spreadsheetId: SPREADSHEET_ID,
+        });
+
+        sheetTitleMap = new Map<string, string>();
+        for (const sheet of metadata.data.sheets || []) {
+            const title = sheet.properties?.title;
+            if (title) {
+                sheetTitleMap.set(normalizeKey(title), title);
+            }
+        }
+    }
+
+    const resolved = sheetTitleMap.get(normalizeKey(expectedName));
+    return resolved || expectedName;
+};
 
 export const getSheetsInfo = async () => {
     const response = await sheets.spreadsheets.get({
@@ -41,16 +72,17 @@ export const getSheetsInfo = async () => {
 
 export const getStudentsFromSheet = async () => {
     try {
+        const studentsSheet = await getSheetTitle("Students");
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: "Students!A2:E",
+            range: `'${studentsSheet}'!A2:E`,
         });
         const rows = response.data.values || [];
         return rows.map((row: any[]) => ({
-            hallticket_id: row[0],
-            name: row[1],
-            branch: row[2],
-            section: row[3],
+            hallticket_id: (row[0] || "").toString().trim().toUpperCase(),
+            name: (row[1] || "").toString().trim(),
+            branch: (row[2] || "").toString().trim(),
+            section: (row[3] || "").toString().trim(),
             year: parseInt(row[4], 10),
         }));
     } catch (error) {
@@ -61,9 +93,10 @@ export const getStudentsFromSheet = async () => {
 
 export const getLogsFromSheet = async () => {
     try {
+        const lateLogsSheet = await getSheetTitle("LateLogs");
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: "LateLogs!A2:F",
+            range: `'${lateLogsSheet}'!A2:F`,
         });
         const rows = response.data.values || [];
         return rows.map((row: any[]) => ({
@@ -82,9 +115,10 @@ export const getLogsFromSheet = async () => {
 
 export const getUsersFromSheet = async () => {
     try {
+        const usersSheet = await getSheetTitle("User");
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEET_ID,
-            range: "User!A2:D",
+            range: `'${usersSheet}'!A2:D`,
         });
         const rows = response.data.values || [];
         return rows
@@ -103,9 +137,10 @@ export const getUsersFromSheet = async () => {
 
 export const appendLateLog = async (data: any) => {
     const { id, hallticket_id, reason, timestamp, date, name } = data;
+    const lateLogsSheet = await getSheetTitle("LateLogs");
     return await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: "LateLogs!A2:F",
+        range: `'${lateLogsSheet}'!A2:F`,
         valueInputOption: "USER_ENTERED",
         requestBody: {
             values: [[id, hallticket_id, reason, timestamp, date, name]],
@@ -114,6 +149,7 @@ export const appendLateLog = async (data: any) => {
 };
 
 export const updateStudentsBatch = async (students: any[]) => {
+    const studentsSheet = await getSheetTitle("Students");
     const values = students.map((s: any) => [
         s.hallticket_id,
         s.name,
@@ -124,7 +160,7 @@ export const updateStudentsBatch = async (students: any[]) => {
 
     return await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: "Students!A2:E",
+        range: `'${studentsSheet}'!A2:E`,
         valueInputOption: "USER_ENTERED",
         requestBody: { values },
     });

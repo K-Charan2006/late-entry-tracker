@@ -27,7 +27,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="app-surface min-h-screen flex items-center justify-center p-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                                 value={loginForm.password}
                                 onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                                 className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all"
-                                placeholder="••••••••"
+                                placeholder="********"
                             />
                         </div>
                         <button
@@ -123,3 +123,4 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </div>
     );
 };
+

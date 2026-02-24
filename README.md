@@ -14,11 +14,11 @@ A robust system for tracking and analyzing campus late entries using React, Expr
     npm run install:all
     ```
 2.  **Credentials**: 
-    - Follow the [GOOGLE_SETUP.md](./GOOGLE_SETUP.md) to get your `credentials.json`.
-    - Place `credentials.json` inside the `backend/` folder.
+    - Follow the [GOOGLE_SETUP.md](./GOOGLE_SETUP.md) to create a Google service account key.
 3.  **Environment**:
     - Create a `.env` file in the root.
     - Add `GOOGLE_SHEET_ID=your_id_here`.
+    - Add `GOOGLE_SERVICE_ACCOUNT_JSON='{"type":"service_account", ...}'`.
 4.  **Run**:
     ```bash
     npm run dev
@@ -33,6 +33,14 @@ A robust system for tracking and analyzing campus late entries using React, Expr
     - `GOOGLE_SHEET_ID`: Your sheet ID.
     - `GOOGLE_SERVICE_ACCOUNT_JSON`: Paste the entire text from `credentials.json`.
     - `NODE_ENV`: `production`
+
+## Handover Documentation
+
+- See [HANDOVER_GUIDE.md](./HANDOVER_GUIDE.md) for full project handover steps:
+  - how to run locally
+  - how to add students and users
+  - how to rotate keys / update env vars
+  - deployment options and troubleshooting
 
 ---
 Developed with high standards for campus management.

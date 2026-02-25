@@ -138,10 +138,6 @@ export default function App() {
         message={message}
         status={status}
         onCheckStatus={checkStatus}
-        onCopyEmail={() => {
-          navigator.clipboard.writeText('sheets-service-account@mrce-lateattendance-system.iam.gserviceaccount.com');
-          setMessage({ type: 'success', text: 'Email copied to clipboard' });
-        }}
       />
     );
   }

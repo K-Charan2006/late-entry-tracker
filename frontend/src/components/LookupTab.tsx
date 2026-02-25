@@ -47,7 +47,7 @@ export const LookupTab: React.FC<LookupTabProps> = ({
                                     type="text"
                                     value={searchId}
                                     onChange={(e) => setSearchId(e.target.value)}
-                                    placeholder="Enter Hallticket ID (e.g. 21A91A0501)"
+                                    placeholder="Enter Hallticket ID (e.g. 24Q91A6728)"
                                     className="w-full pl-12 pr-4 py-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all text-lg"
                                 />
                             </div>

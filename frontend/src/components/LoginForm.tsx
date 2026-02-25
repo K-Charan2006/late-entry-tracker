@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, AlertCircle, FileSpreadsheet } from 'lucide-react';
+import { Clock, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface LoginFormProps {
@@ -8,7 +8,6 @@ interface LoginFormProps {
     message: { type: 'success' | 'error', text: string } | null;
     status: any;
     onCheckStatus: () => void;
-    onCopyEmail: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
@@ -16,8 +15,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     loading,
     message,
     status,
-    onCheckStatus,
-    onCopyEmail
+    onCheckStatus
 }) => {
     const [loginForm, setLoginForm] = useState({ username: '', password: '' });
 
@@ -37,7 +35,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     <div className="inline-block bg-slate-900 p-4 rounded-2xl mb-4 shadow-xl shadow-slate-900/20">
                         <Clock className="text-white w-8 h-8" />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Late Tracker</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Late Entry Tracker</h1>
                     <p className="text-slate-500 font-medium">Sign in to manage campus entries</p>
                 </div>
 
@@ -51,8 +49,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                                 </div>
                                 <p className="opacity-80 leading-relaxed mb-2">
                                     {status.error || 'Failed to connect to Google Sheets.'}
-                                    <br />
-                                    <span className="font-bold">Action:</span> Share your sheet with the service account email provided.
                                 </p>
                                 <button
                                     onClick={(e) => { e.preventDefault(); onCheckStatus(); }}
@@ -100,21 +96,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     </form>
                 </div>
                 <div className="text-center mt-8 space-y-2">
-                    <p className="text-slate-400 text-[10px] font-medium uppercase tracking-widest">
-                        Service Account
-                    </p>
-                    <div className="flex items-center justify-center gap-2">
-                        <code className="bg-slate-100 px-2 py-1 rounded text-[10px] text-slate-600 font-mono">
-                            sheets-service-account@mrce-lateattendance-system.iam.gserviceaccount.com
-                        </code>
-                        <button
-                            onClick={onCopyEmail}
-                            className="p-1 hover:bg-slate-200 rounded transition-colors"
-                            title="Copy Email"
-                        >
-                            <FileSpreadsheet className="w-3 h-3 text-slate-400" />
-                        </button>
-                    </div>
                     <p className="text-slate-400 text-[10px] font-medium uppercase tracking-widest">
                         Campus Management System v1.0
                     </p>

@@ -24,15 +24,12 @@ export const CoverScreen: React.FC<CoverScreenProps> = ({ onDone }) => {
             <iframe
               loading="lazy"
               className="absolute inset-0 h-full w-full border-0"
-              src="https://www.canva.com/design/DAHCOkOv-tw/clIJCpAHrD98ksZ76SMyOQ/view?embed"
-              allowFullScreen
+              src="https://www.canva.com/design/DAHCOYCMQMs/i4ItAnBFIwIlpz-KEUluYQ/view?embed"
               title="Project Cover"
             />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-white/95" />
           </div>
         </div>
-        <p className="mt-4 text-center text-sm font-medium text-slate-600">
-          Developed by Charan K
-        </p>
       </motion.div>
     </div>
   );

@@ -29,7 +29,7 @@ export const Layout: React.FC<LayoutProps> = ({
                         <Clock className="text-white w-6 h-6" />
                     </div>
                     <div>
-                        <h1 className="font-bold text-xl tracking-tight">Late Tracker</h1>
+                        <h1 className="font-bold text-xl tracking-tight">Late Entry Tracker</h1>
                         <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Campus Management</p>
                     </div>
                 </div>

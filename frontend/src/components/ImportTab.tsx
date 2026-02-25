@@ -40,7 +40,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImport, loading }) => {
                         <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 block">JSON Data</label>
                         <textarea
                             onChange={handleTextChange}
-                            placeholder='[{"hallticket_id": "21A91A0501", "name": "John Doe", "branch": "CSE", "section": "A", "year": 3}]'
+                            placeholder='[{"hallticket_id":"24Q91A6728","name":"Karumanchi Charan","branch":"CSE","section":"DS","year":2}]'
                             className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all min-h-[300px] font-mono text-sm"
                             disabled={loading}
                         />

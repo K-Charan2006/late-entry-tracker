@@ -15,19 +15,19 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImport, loading }) => {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <div className="glass-card p-8 bg-white border border-slate-100 rounded-3xl shadow-sm">
-                <div className="flex items-center gap-3 mb-6">
+            <div className="glass-card p-4 sm:p-8 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
+                <div className="flex items-center gap-3 mb-5 sm:mb-6">
                     <div className="bg-slate-100 p-3 rounded-xl">
                         <UserPlus className="w-6 h-6 text-slate-600" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold">Import Student Data</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold">Import Student Data</h2>
                         <p className="text-sm text-slate-500">Update your student database for the new batch</p>
                     </div>
                 </div>
 
-                <div className="space-y-6">
-                    <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                <div className="space-y-5 sm:space-y-6">
+                    <div className="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-100">
                         <h4 className="font-bold text-sm mb-2">Instructions</h4>
                         <ul className="text-sm text-slate-600 space-y-2 list-disc pl-4">
                             <li>Prepare your student list in JSON format.</li>
@@ -41,7 +41,7 @@ export const ImportTab: React.FC<ImportTabProps> = ({ onImport, loading }) => {
                         <textarea
                             onChange={handleTextChange}
                             placeholder='[{"hallticket_id":"24Q91A6728","name":"Karumanchi Charan","branch":"CSE","section":"DS","year":2}]'
-                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all min-h-[300px] font-mono text-sm"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all min-h-[240px] sm:min-h-[300px] font-mono text-xs sm:text-sm"
                             disabled={loading}
                         />
                     </div>

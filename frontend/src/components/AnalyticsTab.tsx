@@ -126,9 +126,9 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-8">
             {/* Advanced Filters */}
-            <div className="glass-card p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
+            <div className="glass-card p-4 sm:p-6 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                     <h3 className="text-lg font-bold text-slate-800">Analytics Filters</h3>
                     <button
@@ -216,20 +216,20 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-                <div className="glass-card p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
+            <div className="grid md:grid-cols-3 gap-3 sm:gap-6">
+                <div className="glass-card p-4 sm:p-6 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Filtered Entries</p>
-                    <p className="text-4xl font-bold">{filteredLogs.length}</p>
+                    <p className="text-3xl sm:text-4xl font-bold">{filteredLogs.length}</p>
                 </div>
-                <div className="glass-card p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                <div className="glass-card p-4 sm:p-6 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Entries Today</p>
-                    <p className="text-4xl font-bold">
+                    <p className="text-3xl sm:text-4xl font-bold">
                         {filteredLogs.filter(l => l.date === format(new Date(), 'yyyy-MM-dd')).length}
                     </p>
                 </div>
-                <div className="glass-card p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                <div className="glass-card p-4 sm:p-6 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Unique Students</p>
-                    <p className="text-4xl font-bold">{new Set(filteredLogs.map(l => l.hallticket_id)).size}</p>
+                    <p className="text-3xl sm:text-4xl font-bold">{new Set(filteredLogs.map(l => l.hallticket_id)).size}</p>
                 </div>
             </div>
 
@@ -240,7 +240,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
-                        className="glass-card p-8 bg-white border border-slate-900/10 rounded-3xl shadow-sm"
+                        className="glass-card p-4 sm:p-8 bg-white border border-slate-900/10 rounded-2xl sm:rounded-3xl shadow-sm"
                     >
                         <div className="flex items-center justify-between mb-6">
                             <div>
@@ -281,10 +281,10 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                 )}
             </AnimatePresence>
 
-            <div className="grid md:grid-cols-2 gap-8">
-                <div className="glass-card p-8 bg-white border border-slate-100 rounded-3xl shadow-sm">
+            <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
+                <div className="glass-card p-4 sm:p-8 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                     <h3 className="text-xl font-bold mb-6">Branch Comparison</h3>
-                    <div className="h-[300px]">
+                    <div className="h-[240px] sm:h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
@@ -304,7 +304,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
                         {branchData.map((d, i) => (
                             <div key={d.name} className="flex items-center gap-2 text-sm">
                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
@@ -315,9 +315,9 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                     </div>
                 </div>
 
-                <div className="glass-card p-8 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                <div className="glass-card p-4 sm:p-8 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                     <h3 className="text-xl font-bold mb-6">Daily Trend</h3>
-                    <div className="h-[300px]">
+                    <div className="h-[240px] sm:h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={dailyData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -340,7 +340,7 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({ logs, user }) => {
                 </div>
             </div>
 
-            <div className="glass-card p-8 bg-white border border-slate-100 rounded-3xl shadow-sm">
+            <div className="glass-card p-4 sm:p-8 bg-white border border-slate-100 rounded-2xl sm:rounded-3xl shadow-sm">
                 <h3 className="text-xl font-bold mb-6">Detailed Activity Log</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">

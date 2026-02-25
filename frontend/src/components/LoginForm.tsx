@@ -25,22 +25,22 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     };
 
     return (
-        <div className="app-surface min-h-screen flex items-center justify-center p-6">
+        <div className="app-surface min-h-screen flex items-center justify-center p-4 sm:p-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-md"
             >
-                <div className="text-center mb-8">
-                    <div className="inline-block bg-slate-900 p-4 rounded-2xl mb-4 shadow-xl shadow-slate-900/20">
-                        <Clock className="text-white w-8 h-8" />
+                <div className="text-center mb-6 sm:mb-8">
+                    <div className="inline-block bg-slate-900 p-3 sm:p-4 rounded-2xl mb-4 shadow-xl shadow-slate-900/20">
+                        <Clock className="text-white w-7 h-7 sm:w-8 sm:h-8" />
                     </div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Late Entry Tracker</h1>
-                    <p className="text-slate-500 font-medium">Sign in to manage campus entries</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Late Entry Tracker</h1>
+                    <p className="text-sm sm:text-base text-slate-500 font-medium">Sign in to manage campus entries</p>
                 </div>
 
-                <div className="glass-card p-8 bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="glass-card p-4 sm:p-8 bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl">
+                    <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                         {status && !status.success && (
                             <div className="bg-amber-50 text-amber-700 p-4 rounded-xl text-sm border border-amber-100 mb-4">
                                 <div className="flex items-center gap-2 font-bold mb-1">
@@ -89,7 +89,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors disabled:opacity-50"
+                            className="w-full py-3 sm:py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors disabled:opacity-50"
                         >
                             {loading ? "Authenticating..." : "Sign In"}
                         </button>

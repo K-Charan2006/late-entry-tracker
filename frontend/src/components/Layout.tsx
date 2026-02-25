@@ -23,14 +23,14 @@ export const Layout: React.FC<LayoutProps> = ({
     return (
         <div className="app-surface min-h-screen flex flex-col">
             {/* Header */}
-            <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-                <div className="flex items-center gap-3">
-                    <div className="bg-slate-900 p-2 rounded-lg">
-                        <Clock className="text-white w-6 h-6" />
+            <header className="bg-white/85 backdrop-blur-md border-b border-slate-200 px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div className="bg-slate-900 p-2 rounded-lg shrink-0">
+                        <Clock className="text-white w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <div>
-                        <h1 className="font-bold text-xl tracking-tight">Late Entry Tracker</h1>
-                        <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Campus Management</p>
+                    <div className="min-w-0">
+                        <h1 className="font-bold text-base sm:text-xl tracking-tight leading-tight truncate">Late Entry Tracker</h1>
+                        <p className="text-[10px] sm:text-xs text-slate-500 font-medium uppercase tracking-wider truncate">Campus Management</p>
                     </div>
                 </div>
                 <div className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
@@ -50,7 +50,7 @@ export const Layout: React.FC<LayoutProps> = ({
                         </button>
                     ))}
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                     <div className="hidden sm:block text-right">
                         <p className="text-sm font-bold text-slate-900">{user?.username}</p>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{user?.role}</p>
@@ -65,23 +65,23 @@ export const Layout: React.FC<LayoutProps> = ({
                 </div>
             </header>
 
-            <main className="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full">
+            <main className="flex-1 p-3 sm:p-6 pb-24 md:pb-6 max-w-7xl mx-auto w-full">
                 {children}
             </main>
 
             {/* Mobile Navigation */}
-            <nav className="md:hidden bg-white/90 backdrop-blur-md border-t border-slate-200 px-6 py-3 flex items-center justify-around sticky bottom-0 z-10 shadow-lg">
+            <nav className="md:hidden bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex items-center justify-around sticky bottom-0 z-10 shadow-lg">
                 {tabs.filter(t => t.roles.includes(user?.role || '')).map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={cn(
-                            "flex flex-col items-center gap-1 transition-all",
+                            "flex flex-col items-center gap-1 transition-all min-w-0 px-2 py-1 rounded-lg",
                             activeTab === tab.id ? "text-slate-900" : "text-slate-400"
                         )}
                     >
-                        <tab.icon className="w-6 h-6" />
-                        <span className="text-[10px] font-bold uppercase tracking-tighter">{tab.label.split(' ')[0]}</span>
+                        <tab.icon className="w-5 h-5" />
+                        <span className="text-[10px] font-bold uppercase tracking-tight">{tab.label.split(' ')[0]}</span>
                     </button>
                 ))}
             </nav>
